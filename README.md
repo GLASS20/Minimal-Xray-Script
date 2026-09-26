@@ -1,61 +1,57 @@
-# Xray 安装脚本
+# Minimal Xray Script
 
-本仓库提供一键安装和配置 **Xray-core** 的 Shell 脚本，适用于 **Alpine Linux** 和 **Debian 13 x86_64**。
+一键安装和配置 **Xray-core** 的 Shell 脚本，支持 **Alpine Linux** 和 **Debian 13 x86_64**。
 
-脚本可以自动下载最新版本的 Xray-core，并配置 **VLESS + REALITY**。同时保留 Hysteria 2 的安装选项。
+支持快速配置 **VLESS + REALITY**，也提供 **Hysteria 2** 安装选项。
 
 ## 功能
 
-* 自动检测并下载最新版本 Xray-core
-* 支持 **Debian 13 x86_64**
-* 支持 Xray **VLESS + REALITY**
-* 支持自动配置 REALITY
+* 自动下载最新版本 Xray-core
+* 自动生成 UUID、REALITY 密钥和 Short ID
+* 自动配置 VLESS + REALITY
 * 支持按地区选择 REALITY Target / SNI
-* 自动生成 UUID、REALITY Private Key / Public Key 和 Short ID
 * 自动生成客户端 VLESS URI
-* Xray 配置文件自动进行语法检查
-* 自动设置 Xray 开机启动
-* 支持安装 Hysteria 2
-* 下载的 Xray 压缩包支持 SHA-256 校验
+* 安装后自动检查 Xray 配置
+* 自动设置开机启动
+* 支持 SHA-256 校验 Xray 压缩包
+* 可选安装 Hysteria 2
 
-## 安装方法
+## 安装
 
 ### Alpine Linux
 
 ```sh
-wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/refs/heads/main/alpine-install.sh
+wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/main/alpine-install.sh
 bash alpine-install.sh
 ```
 
 ### Debian 13 x86_64
 
 ```sh
-wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/refs/heads/main/debian-install.sh
+wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/main/debian-install.sh
 bash debian-install.sh
 ```
 
-> Debian 版本针对 **Debian 13 (trixie) x86_64** 进行适配。
+## 配置 Xray
 
-## Xray 配置
-
-运行安装脚本后，可以选择：
+运行脚本后选择：
 
 ```text
-1) install Xray and Config Reality
-2) install Hysteria 2
+1) Install Xray + Reality
+2) Install Hysteria 2
 ```
 
-选择 Xray 后，可以进一步选择：
+选择 Xray 后：
 
 ```text
-1) Auto Config (Amazon target)
-2) Manual/Regional Config
+1) Auto Config
+2) Regional Config
 3) Exit
 ```
 
 ### 自动配置
 
-自动配置使用：
+默认使用：
 
 ```text
 Target: www.amazon.com:443
@@ -68,10 +64,9 @@ SNI:    www.amazon.com
 * REALITY Private Key
 * REALITY Public Key
 * Short ID
+* VLESS 客户端 URI
 
-并生成 VLESS REALITY 客户端连接 URI。
-
-配置完成后，客户端参数会保存到：
+生成的客户端信息保存在：
 
 ```text
 /root/xray-reality.txt
@@ -79,183 +74,119 @@ SNI:    www.amazon.com
 
 ### 区域配置
 
-区域配置提供以下选项：
+可以根据地区选择 REALITY Target / SNI：
 
 ```text
-1. US
-2. UK
-3. JP
-4. HK
-5. TW
-6. SG
-7. FR
-8. DE
-9. IN
-10. Others
+1) US
+2) UK
+3) JP
+4) HK
+5) TW
+6) SG
+7) FR
+8) DE
+9) IN
+10) Others
 ```
 
-选择对应区域后，脚本会自动生成对应的 REALITY Target 和 SNI。
+## Xray 文件位置
 
-## 管理 Xray 服务
+| 文件         | 路径                                 |
+| ---------- | ---------------------------------- |
+| Xray 程序    | `/usr/local/bin/xray/xray`         |
+| 命令         | `/usr/local/sbin/xray`             |
+| 配置文件       | `/usr/local/etc/xray/config.json`  |
+| 数据目录       | `/usr/local/share/xray/`           |
+| 日志目录       | `/var/log/xray/`                   |
+| systemd 服务 | `/etc/systemd/system/xray.service` |
 
-### Debian 13
+## Xray 管理
 
-Debian 版本使用 **systemd** 管理 Xray 服务。
-
-启动：
-
-```sh
-sudo systemctl start xray
-```
-
-停止：
-
-```sh
-sudo systemctl stop xray
-```
-
-重启：
+### Debian
 
 ```sh
-sudo systemctl restart xray
-```
-
-查看状态：
-
-```sh
-sudo systemctl status xray
-```
-
-设置开机启动：
-
-```sh
-sudo systemctl enable xray
-```
-
-取消开机启动：
-
-```sh
-sudo systemctl disable xray
+systemctl start xray
+systemctl stop xray
+systemctl restart xray
+systemctl status xray
+systemctl enable xray
+systemctl disable xray
 ```
 
 查看日志：
 
 ```sh
-sudo journalctl -u xray -n 100 --no-pager
+journalctl -u xray -n 100 --no-pager
 ```
 
-实时查看日志：
+实时查看：
 
 ```sh
-sudo journalctl -u xray -f
+journalctl -u xray -f
 ```
 
-## Xray 配置文件
+### Alpine
 
-Xray 主程序：
-
-```text
-/usr/local/bin/xray/xray
-```
-
-命令行软链接：
-
-```text
-/usr/local/sbin/xray
-```
-
-配置文件：
-
-```text
-/usr/local/etc/xray/config.json
-```
-
-Xray 数据文件：
-
-```text
-/usr/local/share/xray/
-```
-
-日志目录：
-
-```text
-/var/log/xray/
-```
-
-systemd 服务文件：
-
-```text
-/etc/systemd/system/xray.service
+```sh
+service xray start
+service xray stop
+service xray restart
+service xray status
 ```
 
 ## 检查 Xray 配置
 
-可以使用以下命令检查配置文件：
-
 ```sh
-sudo /usr/local/bin/xray/xray run -test \
+/usr/local/bin/xray/xray run -test \
   -format json \
   -c /usr/local/etc/xray/config.json
 ```
 
-如果配置正确，Xray 会通过配置检查。
+如果检查通过，说明配置文件没有语法错误。
 
-也可以直接使用：
-
-```sh
-sudo systemctl restart xray
-```
-
-如果启动失败，可以查看：
+如果 Xray 无法启动，可以查看日志：
 
 ```sh
-sudo journalctl -u xray -n 100 --no-pager
+journalctl -u xray -n 100 --no-pager
 ```
 
 ## Hysteria 2
 
-脚本同时提供 Hysteria 2 安装选项。
-
 选择：
 
 ```text
-2) install Hysteria 2
+2) Install Hysteria 2
 ```
 
-安装完成后，配置文件位于：
+主要文件：
 
 ```text
-/etc/hysteria/config.yaml
+程序：/usr/local/bin/hysteria
+配置：/etc/hysteria/config.yaml
+服务：/etc/systemd/system/hysteria.service
 ```
 
-程序：
-
-```text
-/usr/local/bin/hysteria
-```
-
-服务文件：
-
-```text
-/etc/systemd/system/hysteria.service
-```
-
-管理 Hysteria 2：
+管理服务：
 
 ```sh
-sudo systemctl start hysteria
-sudo systemctl stop hysteria
-sudo systemctl restart hysteria
-sudo systemctl status hysteria
+systemctl start hysteria
+systemctl stop hysteria
+systemctl restart hysteria
+systemctl status hysteria
 ```
 
 查看日志：
 
 ```sh
-sudo journalctl -u hysteria -n 100 --no-pager
+journalctl -u hysteria -n 100 --no-pager
 ```
 
-## 源代码
+## 参考
 
-本项目部分代码参考：
-https://github.com/miku111/XrayOnAlpine
+部分代码参考：
+
+[XrayOnAlpine](https://github.com/miku111/XrayOnAlpine?utm_source=chatgpt.com)
+
+## License
+
+MIT
