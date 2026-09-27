@@ -21,14 +21,14 @@
 ### Alpine Linux
 
 ```sh
-wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/main/alpine-install.sh
+wget https://raw.githubusercontent.com/ICMP-UNREACHABLE/Minimal-Xray-Script/main/alpine-install.sh
 bash alpine-install.sh
 ```
 
 ### Debian 13 x86_64
 
 ```sh
-wget https://raw.githubusercontent.com/GLASS20/Minimal-Xray-Script/main/debian-install.sh
+wget https://raw.githubusercontent.com/ICMP-UNREACHABLE/Minimal-Xray-Script/main/debian-install.sh
 bash debian-install.sh
 ```
 
@@ -185,7 +185,7 @@ journalctl -u hysteria -n 100 --no-pager
 
 部分代码参考：
 
-[XrayOnAlpine](https://github.com/miku111/XrayOnAlpine?utm_source=chatgpt.com)
+[XrayOnAlpine](https://github.com/miku111/XrayOnAlpine)
 
 ## License
 
